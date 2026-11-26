@@ -1,6 +1,6 @@
 {
   "name": "rocky-mem-dsh",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "rocky-mem for DeepSeek Harness: session-start context injection, task-time retrieval, and the portable rocky-mem skill.",
   "type": "module",
   "main": "./lib/index.js",
@@ -12,10 +12,10 @@
     "cordis.patch.yml",
     "docs",
     "locale",
-    "icon.svg",
     "LICENSE",
     "README.md",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "assets/brand/icon-256.png"
   ],
   "keywords": [
     "dsh-plugin",
@@ -51,5 +51,6 @@
     "@deepseek-ai/dsh-mcp-client": {
       "optional": true
     }
-  }
+  },
+  "icon": "./assets/brand/icon-256.png"
 }

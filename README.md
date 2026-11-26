@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/brand/icon-512.png" width="140" alt="rocky-mem mascot">
+</p>
+
 # rocky-mem-dsh
 
 **rocky-mem for DeepSeek Harness.** Session-start context injection, optional
