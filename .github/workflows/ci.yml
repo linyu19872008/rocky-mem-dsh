@@ -1,0 +1,36 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax
+        run: for f in lib/*.js scripts/*.mjs test/*.mjs; do node --check "$f"; done
+
+      - name: Unit tests
+        run: node --test test/
+
+      - name: Package contents
+        run: npm pack --dry-run
+
+      - name: Market entry is a valid format-1 index
+        run: |
+          node scripts/gen-market-entry.mjs --index --out /tmp/index.json
+          node -e "
+            const j = require('/tmp/index.json');
+            if (j.format !== 1) throw new Error('format');
+            if (!Array.isArray(j.plugins) || j.plugins.length !== 1) throw new Error('plugins');
+            const p = j.plugins[0];
+            if (!p.name || !p.versions?.[0]?.source) throw new Error('entry');
+            console.log('market entry ok:', p.name, p.versions[0].version);
+          "

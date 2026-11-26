@@ -1,0 +1,54 @@
+name: release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Assert tag matches package.json
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pkg="$(node -p "require('./package.json').version")"
+          test "$tag" = "$pkg" || { echo "tag $tag != package.json $pkg"; exit 1; }
+
+      - name: Assert the bundle patch and manifest agree
+        run: |
+          grep -q "name: rocky-mem-dsh" cordis.patch.yml
+          node -e "const p=require('./package.json'); if(!p.dsh?.bundle?.patch) process.exit(1)"
+
+      - name: Syntax check
+        run: for f in lib/*.js scripts/*.mjs; do node --check "$f"; done
+
+      - name: Pack
+        run: npm pack --dry-run
+
+      - name: Publish
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Generate index entry
+        run: node scripts/gen-market-entry.mjs --index --out dist/index.json
+
+      - name: Upload index artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: market-index
+          path: dist/index.json
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true

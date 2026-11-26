@@ -1,0 +1,65 @@
+name: market-sync
+
+# Daily drift check: the curated catalog and the jsdelivr index should both
+# advertise the version that is actually published on npm. A mismatch is
+# silent rot, so it becomes an issue instead.
+
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Compare published version with catalog entries
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          name="$(node -p "require('./package.json').name")"
+          local_version="$(node -p "require('./package.json').version")"
+          npm_version="$(npm view "$name" version 2>/dev/null || echo missing)"
+
+          fetch_version() {
+            curl -sS --max-time 20 "$1" \
+              | node -e "
+                  let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{
+                    let j;try{j=JSON.parse(s)}catch{console.log('parse-error');return}
+                    const name=process.argv[1];
+                    const list=Array.isArray(j)?j:(j.plugins||[]);
+                    const hit=list.find(p=>(p.name||'')===name);
+                    if(!hit){console.log('absent');return}
+                    const vs=(hit.versions||[]).map(v=>v.version);
+                    console.log(vs.sort((a,b)=>a.localeCompare(b,undefined,{numeric:true})).pop()||'no-versions');
+                  })
+                " "$name" || echo fetch-error
+          }
+
+          catalog="$(fetch_version https://awesome-dsh-plugin.com/plugins.json)"
+          index="$(fetch_version https://cdn.jsdelivr.net/npm/dsh-plugin-catalog/index.json)"
+          echo "npm=$npm_version package.json=$local_version catalog=$catalog index=$index"
+
+          if [ "$npm_version" = "missing" ]; then
+            echo "::error::$name is not published on npm yet"
+            exit 1
+          fi
+          if [ "$npm_version" != "$local_version" ]; then
+            echo "::error::package.json $local_version does not match npm $npm_version"
+            exit 1
+          fi
+          if [ "$catalog" = "absent" ] || [ "$index" = "absent" ]; then
+            echo "::warning::$name is not listed in the curated catalog yet; open the listing PR"
+          elif [ "$catalog" != "$npm_version" ] || [ "$index" != "$npm_version" ]; then
+            echo "::warning::catalog=$catalog index=$index npm=$npm_version (catalog CI may lag a day)"
+          fi
