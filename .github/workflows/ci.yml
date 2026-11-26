@@ -18,7 +18,7 @@ jobs:
         run: for f in lib/*.js scripts/*.mjs test/*.mjs; do node --check "$f"; done
 
       - name: Unit tests
-        run: node --test test/
+        run: node --test test/*.test.mjs
 
       - name: Package contents
         run: npm pack --dry-run
