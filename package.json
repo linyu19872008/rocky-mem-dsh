@@ -52,5 +52,13 @@
       "optional": true
     }
   },
-  "icon": "./assets/brand/icon-256.png"
+  "icon": "./assets/brand/icon-256.png",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linyu19872008/rocky-mem-dsh.git"
+  },
+  "homepage": "https://github.com/linyu19872008/rocky-mem-dsh#readme",
+  "bugs": {
+    "url": "https://github.com/linyu19872008/rocky-mem-dsh/issues"
+  }
 }

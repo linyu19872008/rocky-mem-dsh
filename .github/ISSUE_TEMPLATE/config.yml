@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security report
+    url: https://github.com/linyu19872008/rocky-mem-dsh/security/advisories/new
+    about: Please report vulnerabilities privately.
+  - name: rocky-mem server
+    url: https://github.com/linyu19872008/rocky-mem/issues
+    about: Bugs in retrieval, gates or the ledger itself belong in the server repo.

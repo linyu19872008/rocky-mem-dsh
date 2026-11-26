@@ -1,0 +1,17 @@
+name: Feature request
+description: A new gate, a new injection mode, or a host integration.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+    validations:
+      required: true
+  - type: textarea
+    id: cost
+    attributes:
+      label: What it costs per turn
+      description: Tokens injected, calls per session, and what happens when the daemon is down.
+    validations:
+      required: true
