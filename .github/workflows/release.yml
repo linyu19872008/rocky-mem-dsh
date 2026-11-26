@@ -52,7 +52,7 @@ jobs:
         run: node scripts/gen-market-entry.mjs --index --out dist/index.json
 
       - name: Upload index artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: market-index
           path: dist/
