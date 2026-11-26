@@ -1,4 +1,7 @@
 {
-  "name": "rocky-mem",
-  "description": "Engineering experience ledger for coding agents: standing preferences injected at session start, provenance-backed lessons retrieved before work."
+  "meta": {
+    "title": "rocky-mem",
+    "description": "Engineering experience ledger for coding agents: standing preferences injected at session start, provenance-backed lessons retrieved before work, and an explicit record of when each lesson stops applying.",
+    "detail": "docs/DETAIL.md"
+  }
 }

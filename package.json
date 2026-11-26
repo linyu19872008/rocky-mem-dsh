@@ -15,7 +15,8 @@
     "LICENSE",
     "README.md",
     "CHANGELOG.md",
-    "assets/brand/icon-256.png"
+    "assets/brand/icon-256.png",
+    "README.zh-CN.md"
   ],
   "keywords": [
     "dsh-plugin",

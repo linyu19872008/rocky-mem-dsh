@@ -17,6 +17,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Bilingual README (`README.md` in English, `README.zh-CN.md`), restructured for
+  a first-time reader: problem, what you get, screenshots, quick start with the
+  expected result, configuration, the measured reason task-time retrieval ships
+  off, transports, failure behaviour, privacy, compatibility, troubleshooting and
+  uninstall.
+- `locale/*.json` now use the documented `meta.{title,description,detail}` shape,
+  so the Plugins page shows the detail document instead of falling back to the
+  README; the detail document exists in English and Chinese and no longer embeds
+  HTML (the page does not render it).
+- `scripts/check-readme.mjs` asserts the two READMEs keep the same structure,
+  that each locale points at an existing detail document, and that every relative
+  link resolves; it runs in CI.
+
 - Brand assets in `assets/brand/`: the full-character mascot on a transparent
   background with the ground shadow removed, a soft outline for legibility on
   light backgrounds, per-size icons (16-1024), a circular-safe avatar, and a
