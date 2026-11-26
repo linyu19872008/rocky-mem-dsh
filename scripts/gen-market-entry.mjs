@@ -8,7 +8,7 @@
 // The output is what a plugin index (DSH Discover) and the curated catalog PR
 // both need: name, title, description, icon, author, repository, versions.
 
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { copyFile, readFile, writeFile, mkdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -52,6 +52,15 @@ if (process.argv.includes('--out')) {
   await mkdir(dirname(target), { recursive: true });
   await writeFile(target, out + '\n', 'utf8');
   console.log(`wrote ${target}`);
+
+  // The index references `icons/rocky-mem.svg`; ship it beside the file so the
+  // artifact is self-contained and the card never points at a 404.
+  if (wantIndex) {
+    const icons = join(dirname(target), 'icons');
+    await mkdir(icons, { recursive: true });
+    await copyFile(join(root, 'icon.svg'), join(icons, 'rocky-mem.svg'));
+    console.log(`wrote ${join(icons, 'rocky-mem.svg')}`);
+  }
 } else {
   console.log(out);
 }
