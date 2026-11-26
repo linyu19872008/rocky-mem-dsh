@@ -10,6 +10,12 @@ plugin, decoupled from the server by its public contract.
 
 > 记忆是状态，经验是台账。这个插件负责**时机**：什么时候把台账递给 agent。
 
+[![ci](https://github.com/linyu19872008/rocky-mem-dsh/actions/workflows/ci.yml/badge.svg)](https://github.com/linyu19872008/rocky-mem-dsh/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/rocky-mem-dsh)](https://www.npmjs.com/package/rocky-mem-dsh)
+[![license](https://img.shields.io/github/license/linyu19872008/rocky-mem-dsh)](LICENSE)
+[![dsh](https://img.shields.io/badge/DSH-%E2%89%A5%200.2.2--rc.1-4b5563)](https://github.com/deepseek-ai/deepseek-harness)
+
+
 ## What it does
 
 | Layer | Responsibility | Where it lives |
@@ -105,6 +111,12 @@ A memory service that is down must never slow a session down.
 | subagent session | never injected |
 
 ## Compatibility
+
+### Why `engines.dsh`
+
+The bundle declares `dsh >= 0.2.2-rc.1` because it relies on `agent/pre-step`
+and `ctx.skills.registerProvider`. Marketplace cards use that field to offer only
+compatible versions; if the Plugins page says "incompatible", this is why.
 
 - DSH `>= 0.2.2-rc.1` (`engines.dsh`), Node `^22.19 || >=24`.
 - rocky-mem contract `>= 1`; the plugin degrades when the server lacks a feature.

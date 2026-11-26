@@ -1,0 +1,31 @@
+name: Bug report
+description: The plugin behaved differently from README or docs/DETAIL.md.
+labels: [bug]
+body:
+  - type: textarea
+    id: symptom
+    attributes:
+      label: What happened
+      description: Include whether context was injected at session start, and what `/rockymem status` prints.
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: '`npm ls -g rocky-mem-dsh` (or the Plugins page) and your DSH version.'
+    validations:
+      required: true
+  - type: dropdown
+    id: daemon
+    attributes:
+      label: Was `rockymem serve` running?
+      options: ['Yes', 'No', 'Not sure']
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Host log lines
+      description: Anything starting with `rocky-mem:` from the DSH log.
+      render: text
