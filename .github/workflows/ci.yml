@@ -13,8 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
-    name: test
+  matrix:
+    name: matrix
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -75,3 +75,16 @@ jobs:
             if (!p.icon?.endsWith('.png')) throw new Error('icon must be a raster');
             console.log('market entry ok:', p.name, p.versions[0].version);
           "
+
+  # A stable check name for branch protection: matrix legs report
+  # "test (22) / test (24)", which changes whenever the matrix does.
+  test:
+    name: test
+    needs: [matrix]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Matrix gate
+        run: |
+          echo "matrix result: ${{ needs.matrix.result }}"
+          [ "${{ needs.matrix.result }}" = "success" ] || exit 1
