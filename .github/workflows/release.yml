@@ -35,9 +35,14 @@ jobs:
         run: npm pack --dry-run
 
       - name: Publish
+        if: ${{ secrets.NPM_TOKEN != '' }}
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Note the skipped publish
+        if: ${{ secrets.NPM_TOKEN == '' }}
+        run: echo "::notice::NPM_TOKEN is unset, so this tag does not publish; publish manually or add the secret."
 
       - name: Generate index entry
         run: node scripts/gen-market-entry.mjs --index --out dist/index.json
