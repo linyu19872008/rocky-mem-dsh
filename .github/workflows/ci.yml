@@ -33,6 +33,9 @@ jobs:
       - name: Unit tests
         run: node --test test/*.test.mjs
 
+      - name: README structure and plugin metadata
+        run: node scripts/check-readme.mjs
+
       # A bundle that forgets the patch, the icon, or a runtime file installs and
       # then does nothing. Assert the shipped list instead of trusting `files`.
       - name: Package contents

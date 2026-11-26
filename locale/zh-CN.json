@@ -1,4 +1,7 @@
 {
-  "name": "rocky-mem 经验台账",
-  "description": "面向编码 agent 的工程经验台账：会话启动注入常驻偏好，任务前检索带出处的经验。"
+  "meta": {
+    "title": "rocky-mem 经验台账",
+    "description": "面向编码 agent 的工程经验台账：会话启动注入常驻偏好，任务前检索带出处的经验，并明确记录每一条在什么条件下不再适用。",
+    "detail": "docs/DETAIL.zh.md"
+  }
 }
