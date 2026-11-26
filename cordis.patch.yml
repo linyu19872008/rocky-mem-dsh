@@ -1,0 +1,54 @@
+# rocky-mem-dsh — DeepSeek Harness bundle patch.
+#
+# Two entries, one install:
+#   1. rockymem-runtime  — the Host plugin: session-start injection,
+#                          optional pre-step retrieval, skill registration.
+#   2. mcp-rockymem      — the MCP client that exposes rocky-mem's six tools.
+#
+# The runtime talks to rocky-mem over its public REST contract
+# (GET /api/v1/doctor, POST /api/v1/context, POST /api/v1/search).
+# The tools talk over MCP (stdio by default; streamable-http once the
+# server mounts /mcp).
+- insert:
+    - id: rockymem-runtime
+      name: rocky-mem-dsh
+      config:
+        # Base URL of a running `rockymem serve`. Set ROCKYMEM_URL to override.
+        endpoint: http://127.0.0.1:7432
+        # Bearer token for the daemon. ROCKYMEM_TOKEN wins over this file.
+        # A SQLite install writes <db-stem>.token next to the database.
+        tokenFile: ~/.local/share/rocky-mem/rocky-mem.token
+        doctorCacheMs: 60000
+        inject:
+          enabled: true
+          # SessionStartSource values that receive the standing pack.
+          onSources: [startup, clear]
+          budgetTokens: 500
+          timeoutMs: 150
+        preStep:
+          # Off in 0.1.0. Turn on after verifying on your host; see docs/DETAIL.md.
+          enabled: false
+          budgetTokens: 400
+          minPromptChars: 12
+          timeoutMs: 200
+
+    # stdio needs no secret in configuration: `rockymem mcp` reads the token
+    # file itself and proxies to a running daemon. Switch to HTTP when the
+    # daemon is remote or when you would rather not spawn a child process:
+    #
+    #   transport: streamable-http
+    #   url: http://127.0.0.1:7432/mcp
+    #   headers:
+    #     Authorization: !!js '`Bearer ${process.env.ROCKYMEM_TOKEN}`'
+    #
+    - id: mcp-rockymem
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: rockymem
+        transport: stdio
+        command: rockymem
+        args: ['mcp']
+        toolCallTimeoutMs: 10000
+        failOnStartupError: false
+        reconnect:
+          enabled: true
