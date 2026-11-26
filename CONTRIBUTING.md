@@ -36,6 +36,14 @@ Conventional commits (`feat:`, `fix:`, `docs:`, `ci:`, `chore:`). PRs run
 `syntax → node --test → npm pack → market index` and must pass before merge; the
 `main` branch is protected.
 
+
+## Branches
+
+Branches are disposable; tags are the record. Merging a PR deletes its head
+branch automatically, and only `main` lives indefinitely. For a branch that was
+closed without merging, use `scripts/prune-merged-branches.sh` (dry run by
+default, `--apply` to delete; it never touches `main` or `dependabot/*`).
+
 ## Releasing
 
 1. Bump `package.json` and add a `CHANGELOG.md` entry.
