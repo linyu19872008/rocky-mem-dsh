@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Plugin metadata is readable.** The restrictive `exports` map did not list
+  `./locale/*.json`, so Plugin Manager could not read `meta.title`,
+  `meta.description` or `meta.detail` and fell back to the package name and the
+  README. The locale files are exported now.
 - `peerDependencies` are now optional: the code already degrades when
   `@deepseek-ai/dsh-llm` or `@deepseek-ai/dsh-mcp-client` cannot be resolved, so
   npm no longer pulls a 9 MB provider tree for a bundle with no runtime
