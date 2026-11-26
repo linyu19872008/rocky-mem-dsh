@@ -1,6 +1,6 @@
 {
   "name": "rocky-mem-dsh",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "rocky-mem for DeepSeek Harness: session-start context injection, task-time retrieval, and the portable rocky-mem skill.",
   "type": "module",
   "main": "./lib/index.js",
