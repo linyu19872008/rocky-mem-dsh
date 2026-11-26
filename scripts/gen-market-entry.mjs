@@ -24,7 +24,7 @@ const entry = {
   name: pkg.name,
   title: 'rocky-mem',
   description: pkg.description,
-  icon: 'icons/rocky-mem.svg',
+  icon: 'icons/rocky-mem.png',
   author: pkg.author ?? 'rocky-mem contributors',
   homepage: repo ? `${repo}#readme` : undefined,
   repository: repo ? { url: repo } : undefined,
@@ -53,13 +53,13 @@ if (process.argv.includes('--out')) {
   await writeFile(target, out + '\n', 'utf8');
   console.log(`wrote ${target}`);
 
-  // The index references `icons/rocky-mem.svg`; ship it beside the file so the
+  // The index references `icons/rocky-mem.png`; ship it beside the file so the
   // artifact is self-contained and the card never points at a 404.
   if (wantIndex) {
     const icons = join(dirname(target), 'icons');
     await mkdir(icons, { recursive: true });
-    await copyFile(join(root, 'icon.svg'), join(icons, 'rocky-mem.svg'));
-    console.log(`wrote ${join(icons, 'rocky-mem.svg')}`);
+    await copyFile(join(root, 'assets/brand/icon-180.png'), join(icons, 'rocky-mem.png'));
+    console.log(`wrote ${join(icons, 'rocky-mem.png')}`);
   }
 } else {
   console.log(out);

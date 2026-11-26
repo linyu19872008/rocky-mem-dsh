@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="mascot.png" width="180" alt="rocky-mem mascot">
+</p>
+
 # rocky-mem
 
 **工程经验台账 for DeepSeek Harness.**
